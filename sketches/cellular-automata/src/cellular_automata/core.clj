@@ -4,37 +4,114 @@
 
 (defn init-generation [n]
   (assoc
-   (vec (repeat rows 0))
-   (int (* rows 0.5)) 1))
+   (vec (repeat n 0))
+   (int (* n 0.5)) 1))
 
 (defn to-radix
   [int r]
   (.toString (biginteger int) r))
 
-(defn setup []
-  (q/frame-rate 30)
-  {:cols 41
-   :rows 41
-   :rule :rule-30
-   :cells (init-generation 41)})
+(defn int->binaryseq
+  "integer number to binary sequence"
+  [i]
+  (map (fn [n] (read-string (str n)))
+       (to-radix i 2)))
 
+(defn zero-pad
+  "pad a sequence with 0's"
+  [n len]
+  (let [seq-len (count n)
+        diff (- len seq-len)
+        pad (repeat diff 0)]
+    (concat pad n)))
+
+(defn rule->binaryseq
+  "ca rule to binary sequence mapping"
+  [rule]
+  (zero-pad (int->binaryseq rule) 8))
+
+(def input-patterns
+  (map (fn [n]
+         (zero-pad (int->binaryseq n) 3))
+       (reverse (range 0 8))))
+
+(defn rule-mappings
+  "map ca rule to a corresponding input pattern"
+  [rule]
+  (let [rule-seq (rule->binaryseq rule)]
+    (zipmap input-patterns rule-seq)))
+
+(defn generation
+  "apply our ca rule to a row of cells and produce a new generation"
+  [cells rule]
+  (let [mappings (rule-mappings rule)
+        upper-bound (count cells)]
+    (map-indexed
+     (fn [k v]
+       (cond
+         (= k 0)
+         (let [nk (+ k 1)
+               nv (nth cells nk)
+               lookup (list 0 v nv)]
+           (get mappings lookup))
+
+         (= k (- upper-bound 1))
+         (let [pk (- k 1)
+               pv (nth cells pk)
+               lookup (list pv v 0)]
+           (get mappings lookup))
+
+         :else
+         (let [nk (+ k 1)
+               nv (nth cells nk)
+               pk (- k 1)
+               pv (nth cells pk)
+               lookup (list pv v nv)]
+           (get mappings lookup))))
+
+     cells)))
+
+(defn setup []
+  (q/frame-rate 60)
+  (q/background 255)
+  {:rule 30
+   :row 0
+   :cells (init-generation (q/width))})
 
 (defn update-state [state]
-  state)
+  (let [rule (:rule state)
+        last-row (:row state)
+        last-cells (:cells state)]
+    {:rule (if (>= last-row (q/height))
+            (int (q/random 255))
+            rule)
+     :row  (if (< last-row (q/height))
+            (+ last-row 1)
+            0)
+     :cells (if (< last-row (q/height))
+             (generation last-cells rule)
+             (init-generation (q/width)))}))
 
 (defn draw-state [state]
-  (q/background 255))
+  (let [cells (:cells state)
+        indexed (map-indexed vector cells)
+        y-pos (:row state)]
+    (when (= y-pos 0) (q/background 255))
+    (doseq [[x-pos cell] indexed]
+      (if (= cell 1) (q/stroke 0) (q/stroke 255))
+      (q/point x-pos y-pos))))
+
+(defn mouse-pressed
+  "on mouse pressed choose new random ca rule"
+  [state event]
+  (assoc-in state [:rule] (int (q/random 255))))
 
 (q/defsketch cellular-automata
   :title "1D Cellular Automata"
   :size [500 500]
-  ; setup function called only once, during sketch initialization.
   :setup setup
-  ; update-state is called on each iteration before draw-state.
   :update update-state
   :draw draw-state
+  :mouse-pressed mouse-pressed
   :features [:keep-on-top]
-  ; This sketch uses functional-mode middleware.
-  ; Check quil wiki for more info about middlewares and particularly
-  ; fun-mode.
   :middleware [m/fun-mode])
