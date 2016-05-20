@@ -2,12 +2,13 @@
 
 /**
  * Perlin noise fields
- * Step 1, draw basic grid (without noise)
+ * Step 2, draw basic grid and add noise
  *
  */
 
 // ArrayList of PVector holding position data
 ArrayList<PVector> points = new ArrayList<PVector>();
+float time = 0.0;
 
 void setup() {
   size(800, 800);
@@ -30,11 +31,15 @@ void draw() {
   background(0);
   
   for (PVector point : points) {
-    float offset = 0; //map(noise(point.x, point.y), 0, 1, -1, 1);
+    float mX = point.x*0.2; //+time;
+    float mY = point.y*0.2; //+time;
+    float offset = map(noise(mX, mY), 0, 1, -1, 1);
     
     float x = map(point.x+offset, -1, 1, 0, width);
     float y = map(point.y+offset, -1, 1, 0, height);
     
     point(x, y);
   }
+  
+  //time += 0.001;
 }
