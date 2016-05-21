@@ -1,4 +1,4 @@
-# cellular-automata
+# perlin-studies
 
 Several vvvv patches demonstrating perlin noise flow fields.
 
