@@ -77,13 +77,22 @@
              (init-generation (q/width)))}))
 
 (defn draw-state [state]
-  (let [cells (:cells state)
+  (let [rule (:rule state)
+        cells (:cells state)
         indexed (map-indexed vector cells)
         y-pos (:row state)]
+    ;; clear screen if we reached the bottom
     (when (= y-pos 0) (q/background 255))
+    ;; draw our cells
     (doseq [[x-pos cell] indexed]
       (if (= cell 1) (q/stroke 0) (q/stroke 255))
-      (q/point x-pos y-pos))))
+      (q/point x-pos y-pos))
+    ;; draw which rule is choosen
+    (q/no-stroke)
+    (q/fill 255)
+    (q/rect 5 2 32 17)
+    (q/fill 0)
+    (q/text (str rule) 10 15)))
 
 (defn mouse-pressed
   "on mouse pressed choose new random ca rule"
