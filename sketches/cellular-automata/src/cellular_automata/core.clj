@@ -41,35 +41,19 @@
   (let [rule-seq (rule->binaryseq rule)]
     (zipmap input-patterns rule-seq)))
 
+(defn zip-neighbors [n]
+  (let [l (concat [(last n)] (butlast n))
+        r (concat (rest n) [(first n)])]
+    (map list l n r)))
+
 (defn generation
   "apply our ca rule to a row of cells and produce a new generation"
   [cells rule]
   (let [mappings (rule-mappings rule)
-        upper-bound (count cells)]
-    (map-indexed
-     (fn [k v]
-       (cond
-         (= k 0)
-         (let [nk (+ k 1)
-               nv (nth cells nk)
-               lookup (list 0 v nv)]
-           (get mappings lookup))
-
-         (= k (- upper-bound 1))
-         (let [pk (- k 1)
-               pv (nth cells pk)
-               lookup (list pv v 0)]
-           (get mappings lookup))
-
-         :else
-         (let [nk (+ k 1)
-               nv (nth cells nk)
-               pk (- k 1)
-               pv (nth cells pk)
-               lookup (list pv v nv)]
-           (get mappings lookup))))
-
-     cells)))
+        upper-bound (count cells)
+        neighbors (zip-neighbors cells)]
+    (map-indexed (fn [k v] (get mappings (nth neighbors k)))
+                 cells)))
 
 (defn setup []
   (q/frame-rate 60)
