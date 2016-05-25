@@ -34,7 +34,24 @@ class Boid {
     applyForce(steer);
   }
   
-   void display() {
+  void arrive(PVector target) {
+    PVector desired = PVector.sub(target, position);
+ 
+    float d = desired.mag();
+    desired.normalize();
+    if (d < 100) {
+      float m = map(d, 0, 100, 0, maxSpeed);
+      desired.mult(m);
+    } else {
+      desired.mult(maxSpeed);
+    }
+ 
+    PVector steer = PVector.sub(desired, velocity);
+    steer.limit(maxForce);
+    applyForce(steer);
+  }
+  
+  void display() {
     float theta = velocity.heading() + PI/2;
     fill(255, 0, 0);
     noStroke();
