@@ -1,3 +1,10 @@
+// Gestalten mit Code - day 04 - beginner lectures
+
+/**
+ * Conditions (if / else)
+ *
+ */
+
 void setup() {
   size(600, 600);
   smooth(4);

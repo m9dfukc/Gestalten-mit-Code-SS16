@@ -1,3 +1,13 @@
+// Gestalten mit Code - day 04 - beginner lectures
+
+/**
+ * Recursion
+ * Shows how to recursively scale (and offset) a circle 
+ *
+ * Task: 
+ * try the other combinations (in comments below)
+ */
+
 void setup() {
   size(700,400);
 }
@@ -11,7 +21,9 @@ void drawCircle(float x, float y, float radius) {
   stroke(0);
   noFill();
   ellipse(x, y, radius, radius);
-  if(radius > 2) { // vary min size
+  
+  // this is our "exit" condition
+  if(radius > 10) { // vary min size
     // ----
     radius *= 0.75;
     drawCircle(x, y, radius);

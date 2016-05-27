@@ -1,11 +1,22 @@
-void setup() {
-  long factorial = factorialLoop(4); // try a large number and see what happens
-  println(factorial);
-}
+// Gestalten mit Code - day 04 - beginner lectures
 
-// Definition of factorial:
-// The factorial of any number n, usually written as n!, is defined as:
-// n! = n * n – 1 * . . . . * 3 * 2 * 1
+/**
+ * factorial numbers (https://en.wikipedia.org/wiki/Factorial)
+ * 
+ * Definition of factorial
+ * The factorial of any number n, usually written as n!,
+ * is defined as: n! = n * n – 1 * . . . . * 3 * 2 * 1
+ */
+
+void setup() {
+  // factorial computing using classical loops
+  long factorial = factorialLoop(4); 
+  println(factorial);
+  
+  // factorial computing using recursion
+  long factorial2 = factorialRecursion(4);
+  println(factorial2);
+}
 
 // Using a regular loop to compute factorial
 int factorialLoop(int n) {
