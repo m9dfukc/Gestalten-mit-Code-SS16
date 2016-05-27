@@ -2,6 +2,7 @@
 
 /**
  * factorial numbers (https://en.wikipedia.org/wiki/Factorial)
+ * http://www.bogotobogo.com/cplusplus/images/quiz/recursion_factorial.png
  * 
  * Definition of factorial
  * The factorial of any number n, usually written as n!,
