@@ -1,3 +1,5 @@
+// We have to recap this next time, going more into detail!!
+
 /* In the late 1980s, computer scientist Craig Reynolds developed 
  * algorithmic steering behaviors for animated characters.
  * The most famous example is Reynolds’s "boids model" for 

@@ -1,3 +1,11 @@
+// Gestalten mit Code - day 04 - advanced lectures
+
+/**
+ * Random Walkers with a "lifetime" 
+ * Shows basic use of classes
+ *
+ */
+
 ArrayList<Walker> walkers = new ArrayList<Walker>();
 int num = 300;
 
