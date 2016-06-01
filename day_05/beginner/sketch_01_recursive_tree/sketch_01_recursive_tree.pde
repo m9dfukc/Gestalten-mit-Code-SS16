@@ -11,22 +11,22 @@ void draw() {
   translate(width/2, height);
   angle = map(mouseX, 0, width, 0, PI);
   factor = map(mouseY, 0, height, 0.45, 0.8);
-  branch(200, angle);
+  branch(200);
 }
 
-void branch(float length, float angle) {
+void branch(float length) {
   line(0, 0, 0, -length);
   translate(0, -length);
   if (length > 4) {
 
     pushMatrix();
     rotate(angle);
-    branch(length*factor, angle);
+    branch(length*factor);
     popMatrix();
 
     pushMatrix();
     rotate(-angle);
-    branch(length*factor, angle);
+    branch(length*factor);
     popMatrix();
   }
 }
