@@ -1,10 +1,10 @@
 int[] cells;
-int[] rules = {0,1,1,0,1,1,1,0}; // rule 110
+int[] rules = {0, 1, 1, 0, 1, 1, 1, 0}; // rule 110
 int generation = -1;
 
 void setup() {
   frameRate(120);
-  size(1400, 1000);
+  size(600, 800);
   noSmooth();
   noFill();
   cells = new int[width];
@@ -19,10 +19,22 @@ void draw() {
   if (generation < height) {
     populate();
   } else {
-    //background(255);
+    background(255);
     generation = -1;
-    //center();
+    center();
+    delay(2000);
   }
+}
+
+void mousePressed() {
+  rules = randomizeRule(rules);
+}
+
+int[] randomizeRule(int[] r) {
+  for (int i = 0; i < r.length; i++) {
+    r[i] = round(random(1));
+  }
+  return r;
 }
 
 void wave() {
@@ -55,7 +67,7 @@ void populate() {
     int me = cells[i];
     int left = (i > 0) ? cells[i-1] : cells[cells.length-1]; 
     int right = (i < cells.length-2) ? cells[i+1] : cells[0];
-    next[i] = execute(left, me, right); 
+    next[i] = execute(left, me, right);
   }
   cells = next;
   generation++;
