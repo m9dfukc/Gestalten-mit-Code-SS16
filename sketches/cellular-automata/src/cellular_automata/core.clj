@@ -7,6 +7,9 @@
    (vec (repeat n 0))
    (int (* n 0.5)) 1))
 
+(defn rand-generation [n]
+  (take n (repeatedly #(rand-int 2))))
+
 (defn to-radix
   [int r]
   (.toString (biginteger int) r))
