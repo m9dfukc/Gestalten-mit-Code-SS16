@@ -17,26 +17,32 @@ void setup() {
   gridCountX = int(width/cellSize);
   gridCountY = int(height/cellSize);
 
-  grid = new int[gridCountY][gridCountX];
-  buffer = new int[gridCountY][gridCountX];
+  grid       = new int[gridCountY][gridCountX];
+  buffer     = new int[gridCountY][gridCountX];
 
-  populate();
+  grid       = populate(grid);
 }
 
-void populate() {
-  for (int i=0; i < gridCountY; i++) {
-    for (int j=0; j < gridCountX; j++) {
-      grid[i][j] = (random(1) > randProbability) ? 1 : 0; //(i%2 == 0) ? 0 : 1;
+int[][] populate(int[][] g) {
+  int rows = g.length;
+  int cols = (rows > 0) ? g[0].length : 0;
+  for (int i=0; i < rows; i++) {
+    for (int j=0; j < cols; j++) {
+      g[i][j] = (random(1) > randProbability) ? 1 : 0; //(i%2 == 0) ? 0 : 1;
     }
   }
+  return g;
 }
 
-void flush() {
-  for (int i=0; i < gridCountY; i++) {
-    for (int j=0; j < gridCountX; j++) {
-      grid[i][j] = 0; 
+int[][] empty(int[][] g) {
+  int rows = g.length;
+  int cols = (rows > 0) ? g[0].length : 0;
+  for (int i=0; i < rows; i++) {
+    for (int j=0; j < cols; j++) {
+      g[i][j] = 0;
     }
   }
+  return g;
 }
 
 void process() {
@@ -110,10 +116,10 @@ void keyPressed() {
     pause = !pause;
   }
   if(key == 'r') {
-    populate();
+    grid = populate(grid);
   }
   if(key == 'c') {
-    flush();
+    grid = empty(grid);
   }
 }
 
