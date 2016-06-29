@@ -1,21 +1,21 @@
 boolean pause = false;
-int cellSize = 8;
+int cellSize = 2;
 
 int gridCountX;
 int gridCountY;
 int[][] grid;
 int[][] buffer;
 
-float randProbability = 0.9;
+float randProbability = 0.925;
 
 void setup() {
   size(600, 600);
-  frameRate(20);
+  frameRate(30);
   noSmooth();
   background(255);
   
-  gridCountX = width/cellSize;
-  gridCountY = height/cellSize;
+  gridCountX = int(width/cellSize);
+  gridCountY = int(height/cellSize);
 
   grid = new int[gridCountY][gridCountX];
   buffer = new int[gridCountY][gridCountX];
@@ -63,7 +63,7 @@ void process() {
       int bottomLeft  = grid[idxBottom][idxLeft];
       int bottomRight = grid[idxBottom][idxRight];
 
-      int sum = left + right + top + bottom + topLeft + topRight + bottomLeft + bottomRight;
+      int sum = left + right + top + bottom + topLeft + topRight + bottomLeft + bottomRight; // + current;
 
       if (current == 1) {
         buffer[i][j] = 1;
