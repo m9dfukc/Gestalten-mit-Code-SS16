@@ -1,11 +1,9 @@
 boolean pause = false;
-int cellSize = 2;
+int cellSize = 5;
 
 int gridCountX;
 int gridCountY;
 int[][] grid;
-int[][] buffer;
-
 float randProbability = 0.925;
 
 void setup() {
@@ -18,8 +16,6 @@ void setup() {
   gridCountY = int(height/cellSize);
 
   grid       = new int[gridCountY][gridCountX];
-  buffer     = new int[gridCountY][gridCountX];
-
   grid       = populate(grid);
 }
 
@@ -46,18 +42,21 @@ int[][] empty(int[][] g) {
 }
 
 void process() {
-  // a live cell < 2 live neighbours = 0 in the next generation
-  // a live cell 2 or 3 live neighbours = 1 in the next generation
-  // a live cell > 3 live neighbours = 0 in the next generation
-  // a dead cell == 3 live neighbours = 1 in the next generation
-
+  /* Rules of game of life:
+   * a live cell < 2 live neighbours = 0 in the next generation
+   * a live cell 2 or 3 live neighbours = 1 in the next generation
+   * a live cell > 3 live neighbours = 0 in the next generation
+   * a dead cell == 3 live neighbours = 1 in the next generation
+   */
+  
+  int[][] buffer = new int[gridCountY][gridCountX];
   for (int i=0; i < gridCountY; i++) {
     for (int j=0; j < gridCountX; j++) {
 
-      int idxLeft     = (j > 0) ? j - 1 : gridCountX-1;
-      int idxRight    = (j < gridCountX-1) ? j + 1 : 0;
-      int idxTop      = (i > 0) ? i - 1 : gridCountY-1;
-      int idxBottom   = (i < gridCountY-1) ? i + 1 : 0;
+      int idxLeft     = (j > 0) ? j - 1 : gridCountX - 1;
+      int idxRight    = (j < gridCountX - 1) ? j + 1 : 0;
+      int idxTop      = (i > 0) ? i - 1 : gridCountY - 1;
+      int idxBottom   = (i < gridCountY - 1) ? i + 1 : 0;
 
       int current     = grid[i][j];
       int left        = grid[i][idxLeft];
@@ -69,7 +68,7 @@ void process() {
       int bottomLeft  = grid[idxBottom][idxLeft];
       int bottomRight = grid[idxBottom][idxRight];
 
-      int sum = left + right + top + bottom + topLeft + topRight + bottomLeft + bottomRight; // + current;
+      int sum = left + right + top + bottom + topLeft + topRight + bottomLeft + bottomRight;
 
       if (current == 1) {
         buffer[i][j] = 1;
