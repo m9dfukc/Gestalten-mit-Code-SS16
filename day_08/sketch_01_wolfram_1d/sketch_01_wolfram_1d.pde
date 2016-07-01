@@ -1,22 +1,35 @@
 int[] cells;
 int[] rules = {0, 1, 1, 0, 1, 1, 1, 0}; // rule 110
 int generation = -1;
+int cellHeight = 5;
+int cellWidth = 5;
+int gap = 2;
+
 
 void setup() {
   frameRate(120);
   size(600, 800);
+  background(255);
   noSmooth();
   noFill();
-  cells = new int[width];
+  cells = new int[width/cellWidth];
   center();
 }
 
 void draw() {
   for (int i = 0; i < cells.length; i++) {
-    stroke((1-cells[i])*255);
-    point(i, generation);
+    if (cells[i] == 1) {
+      stroke(0);
+      
+      float x = i * cellWidth;
+      float y = generation * cellHeight;
+      float w = cellWidth - gap;
+      float h = cellHeight - gap;
+      
+      rect(x, y, w, h);
+    }
   }
-  if (generation < height) {
+  if (generation * cellHeight < height) {
     populate();
   } else {
     background(255);
