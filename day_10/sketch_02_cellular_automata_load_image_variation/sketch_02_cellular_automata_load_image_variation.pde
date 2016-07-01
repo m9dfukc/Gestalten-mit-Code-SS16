@@ -1,4 +1,4 @@
-boolean pause = true;
+boolean pause = false;
 int cellSize = 1;
 
 int gridCountX;
