@@ -14,7 +14,7 @@ float randProbability = 0.98;
 
 void setup() {
   size(600, 600);
-  frameRate(60);
+  frameRate(9);
   noSmooth();
   background(255);
   
