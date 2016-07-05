@@ -22,6 +22,7 @@ void setup() {
   grid       = new int[gridCountY][gridCountX];
   img        = createImage(gridCountX, gridCountY, RGB);
   img2       = loadImage("initial.png");
+  img2.resize(gridCountX, gridCountY);
 
   grid       = populateFromImage(img2); //populate(grid);
 }
