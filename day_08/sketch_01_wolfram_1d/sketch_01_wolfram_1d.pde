@@ -1,9 +1,8 @@
 int[] cells;
 int[] rules = {0, 1, 1, 0, 1, 1, 1, 0}; // rule 110
 int generation = -1;
-int cellHeight = 5;
-int cellWidth = 5;
-int gap = 2;
+int cellSize = 2;
+int gap = 0;
 
 
 void setup() {
@@ -11,25 +10,24 @@ void setup() {
   size(600, 800);
   background(255);
   noSmooth();
-  noFill();
-  cells = new int[width/cellWidth];
+  noStroke();
+  cells = new int[width/cellSize];
   center();
 }
 
 void draw() {
   for (int i = 0; i < cells.length; i++) {
     if (cells[i] == 1) {
-      stroke(0);
-      
-      float x = i * cellWidth;
-      float y = generation * cellHeight;
-      float w = cellWidth - gap;
-      float h = cellHeight - gap;
+      fill(0);
+      float x = i * cellSize;
+      float y = generation * cellSize;
+      float w = cellSize - gap;
+      float h = cellSize - gap;
       
       rect(x, y, w, h);
     }
   }
-  if (generation * cellHeight < height) {
+  if (generation * cellSize < height) {
     populate();
   } else {
     background(255);
