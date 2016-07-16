@@ -124,7 +124,7 @@ void draw() {
   img.updatePixels();
   image(img, 0, 0, width, height);
   
-  if (!pause && frameCount < 800) process();
+  if (!pause) process();
 }
 
 void keyPressed() {
