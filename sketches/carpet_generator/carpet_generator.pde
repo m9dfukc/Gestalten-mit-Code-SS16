@@ -1,16 +1,18 @@
-boolean pause = false;
-int cellSize = 1;
-
-int gridCountX;
-int gridCountY;
+PImage img;
+int cols;
+int rows;
 int[][] grid;
 int[][] buffer;
 
-float randProbability = 0.05;
-int distProbability = 90; // PLAY with this!! 9, 13, 34, 66, 90
-boolean stripesB = true; // PLAY with this!! numbers between 40 and 120 work well if false
+boolean pause = false;
+int cellSize = 1;
 
-PImage img;
+// Tweak here!! 
+// 9, 13, 34, 66, 90, numbers between 40 and 120 work well if stripesB == false
+int distProbability = 13; 
+// Toggle this!!
+boolean stripesB = true; 
+
 
 void setup() {
   size(600, 900);
@@ -18,14 +20,13 @@ void setup() {
   noSmooth();
   background(255);
   
-  gridCountX = int(width/cellSize);
-  gridCountY = int(height/cellSize);
-  img = createImage(gridCountX, gridCountY, RGB);
+  cols    = int(width/cellSize);
+  rows    = int(height/cellSize);
+  img     = createImage(cols, rows, RGB);
 
-  grid       = new int[gridCountY][gridCountX];
-  buffer     = new int[gridCountY][gridCountX];
- 
-  grid       = populate(grid);
+  grid    = new int[rows][cols];
+  buffer  = new int[rows][cols];
+  grid    = populate(grid);
 }
 
 int[][] populate(int[][] g) {
@@ -56,14 +57,14 @@ int[][] empty(int[][] g) {
 }
 
 void process() {
-  int[][] buffer = new int[gridCountY][gridCountX];
-  for (int i=0; i < gridCountY; i++) {
-    for (int j=1; j < gridCountX; j++) {
+  int[][] buffer = new int[rows][cols];
+  for (int i=0; i < rows; i++) {
+    for (int j=1; j < cols; j++) {
 
       int idxLeft     = (j > 0) ? j - 1 : j;
-      int idxRight    = (j < gridCountX-1) ? j + 1 : 0;
+      int idxRight    = (j < cols-1) ? j + 1 : 0;
       int idxTop      = (i > 0) ? i - 1 : i;
-      int idxBottom   = (i < gridCountY-1) ? i + 1 : 0;
+      int idxBottom   = (i < rows-1) ? i + 1 : 0;
 
       int current     = grid[i][j];
       int left        = grid[i][idxLeft];
@@ -75,37 +76,36 @@ void process() {
       int bottomLeft  = grid[idxBottom][idxLeft];
       int bottomRight = grid[idxBottom][idxRight];
 
-      int sum = left + right + top + bottom + topLeft + topRight + bottomLeft + bottomRight; // + current;
+      int sum = left + right + top + bottom + topLeft + topRight + bottomLeft + bottomRight;
 
-      // Rules of Life ... slightly modified
-      if      ((current == 0) && (sum <  2)) buffer[i][j] = 1;        // Loneliness
-      //else if ((current == 0) && (sum >  2) && bottomLeft == 1) buffer[i][j] = 0;
-      else if ((current == 1) && (sum >  5) && bottom == 1 && top == 1) buffer[i][j] = 1;
-      else if ((current == 1) && (sum >  2)) buffer[i][j] = 0;        // Overpopulation
-      else if ((current == 0) && (sum == 2)) buffer[i][j] = 1;        // Reproduction
-      else                                   buffer[i][j] = current;  // Stasis
+      // Rules of Life ... slightly modified ;)
+      if      ((current == 0) && (sum <  2))                             buffer[i][j] = 1;       
+      else if ((current == 1) && (sum >  5) && bottom == 1 && top == 1)  buffer[i][j] = 1;
+      else if ((current == 1) && (sum >  2))                             buffer[i][j] = 0;        
+      else if ((current == 0) && (sum == 2))                             buffer[i][j] = 1;        
+      else                                                               buffer[i][j] = current; 
     }
   } 
   grid = buffer;
 }
 
 void draw() {
-  println(frameRate);
   background(255);
   
   int index = 0;
   img.loadPixels();
-  for (int i=0; i < gridCountY; i++) {
-    for (int j=0; j < gridCountX; j++) {
+  for (int i=0; i < rows; i++) {
+    for (int j=0; j < cols; j++) {
       int cell = grid[i][j];
       color c = color(255);
       if (cell == 1) {
          
         if (j > 0 && i > 0) {
           
-          boolean horizontal = grid[i-1][j] == 1;
+          //boolean diagonal = grid[i-1][j-1] == 1;
+          //boolean horizontal = grid[i-1][j] == 1;
           boolean vertical = grid[i][j-1] == 1;
-          boolean diagonal = grid[i-1][j-1] == 1;
+         
           if (vertical) {
             c = color(0, 0, 255);
           } else {
@@ -122,10 +122,9 @@ void draw() {
     }
   }
   img.updatePixels();
-  noTint();  // Disable tint
   image(img, 0, 0, width, height);
   
-  if (!pause) process();
+  if (!pause && frameCount < 800) process();
 }
 
 void keyPressed() {
@@ -141,9 +140,9 @@ void keyPressed() {
 }
 
 void mouseDragged() {
-  int indexX = floor(mouseX / cellSize);
-  int indexY = floor(mouseY / cellSize);
-  int cell = grid[indexY][indexX];
+  int indexX = constrain(floor(mouseX / cellSize), 0, cols-1);
+  int indexY = constrain(floor(mouseY / cellSize), 0, rows-1);
+  int cell   = grid[indexY][indexX];
 
   cell = (cell == 0) ? 1 : 0;
   grid[indexY][indexX] = cell;
